@@ -41,46 +41,50 @@ namespace BattleShip
 
                 //Player set the hit location
                 Console.WriteLine("Please set your hit location:");               
-                Point PlayerHitLocation = location.GetLocation(board);
+                Point playerHitLocation = location.GetLocation(board);
 
                 //Check whether player hit the computer's ship
-                if (computer.isHited(PlayerHitLocation, playerRecord) == 0)
+                switch (computer.isHited(playerHitLocation, playerRecord))
                 {
-                    playerHit++;
-                    Console.WriteLine("Your can't hit the same location twice! ");
-                    Console.WriteLine("You lost " + playerHit + " hits");
-                }
-                else if (computer.isHited(PlayerHitLocation, playerRecord) == 1)
-                {
-                    result = "You won!";
-                    break;
-                }
-                else
-                {
-                    playerHit++;
-                    playerRecord[playerRecordIndex] = PlayerHitLocation;
-                    playerRecordIndex++;
-                    Console.WriteLine("Your lost " + playerHit + " hits");
+                    case 0:
+                        playerHit++;
+                        Console.WriteLine("Your can't hit the same location twice! ");
+                        Console.WriteLine("You lost " + playerHit + " hits");
+                        break;
+                    case 1:
+                        result = "You won!";
+                        break;
+                    case 2:
+                        playerHit++;
+                        playerRecord[playerRecordIndex] = playerHitLocation;
+                        playerRecordIndex++;
+                        Console.WriteLine("Your lost " + playerHit + " hits");
+                        break;
                 }
 
                 //Check whether computer hit player's ship
-                if (player.isHited(computerHitLocation, computerRecord) == 0)
+                switch (player.isHited(computerHitLocation, computerRecord))
                 {
-                    computerHit++;
-                    Console.WriteLine("Computer lost " + computerHit + " hits");
+                    case 0:
+                        computerHit++;
+                        Console.WriteLine("Computer lost " + computerHit + " hits");
+                        break;
+                    case 1:
+                        result = "You lost!";
+                        break;
+                    case 2:
+                        computerHit++;
+                        computerRecord[computerRecordIndex] = computerHitLocation;
+                        computerRecordIndex++;
+                        Console.WriteLine("Computer lost " + computerHit + " hits");
+                        break;
                 }
-                else if (player.isHited(computerHitLocation, computerRecord) == 1)
+
+                if(result == "You won!" || result == "You lost!")
                 {
-                    result = "You lost!";
                     break;
                 }
-                else
-                {
-                    computerHit++;
-                    computerRecord[computerRecordIndex] = computerHitLocation;
-                    computerRecordIndex++;
-                    Console.WriteLine("Computer lost " + computerHit + " hits");
-                }
+
             }
 
             Console.WriteLine(result);
