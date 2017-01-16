@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BattleShip
 {
@@ -10,57 +6,84 @@ namespace BattleShip
     {
         static void Main(string[] args)
         {
-            const int size = 5;
+            //Set the board size
+            const int size = 3;
             Board board = new Board(size);
-                   
-            try
+
+            //Because it is a single player game, you play against computer. So let computer initalize itself.
+            Random random = new Random();
+            Player computer = new Player();
+            Ship computerShip = new Ship();
+            computerShip.ShipLocation = new Point(random.Next(size), random.Next(size));
+            computer.setShip = computerShip;
+            int computerHit = 0;
+            Point[] computerRecord = new Point[size * size];
+            int computerRecordIndex = 0;
+
+            //Player's initalization
+            Player player = new Player();
+            Location location = new Location();
+            int playerHit = 0;           
+            Point[] playerRecord = new Point[size * size];
+            int playerRecordIndex = 0;
+            Console.WriteLine("Please set your ship location:");
+            Ship playerShip = new Ship();
+            playerShip.ShipLocation = location.GetLocation(board);
+            player.setShip = playerShip;
+
+            string result = "";
+
+            //
+            while (true)
             {
-                Random random = new Random();
-                Player play1 = new Player();
-                Player play2 = new Player();
+                //Set computer's hit
+                Point computerHitLocation = new Point(random.Next(size), random.Next(size));
 
-                play1.setShipLocation(random.Next(5), random.Next(5), board);
-                play2.setShipLocation(4, 4, board);
-                Point[] points = {
-                    new Point(1,1),
-                    new Point(2,1),
-                    new Point(3,3),
-                    new Point(4,1),
-                    new Point(4,2),
-                    new Point(4,3),
-                };
+                //Player set the hit location
+                Console.WriteLine("Please set your hit location:");               
+                Point PlayerHitLocation = location.GetLocation(board);
 
-                string result = "Game Over!";
-                foreach (Point point in points)
+                //Check whether player hit the computer's ship
+                if (computer.isHited(PlayerHitLocation, playerRecord) == 0)
                 {
-                   if (play1.isHited(point.X, point.Y ,board))
-                    {
-                        result = "You won!";
-                        break;
-                    }
-                   if(play2.isHited(random.Next(5), random.Next(5), board))
-                    {
-                        result = "You lost!";
-                        break;
-                    }
+                    playerHit++;
+                    Console.WriteLine("Your can't hit the same location twice! ");
+                    Console.WriteLine("You lost " + playerHit + " hits");
+                }
+                else if (computer.isHited(PlayerHitLocation, playerRecord) == 1)
+                {
+                    result = "You won!";
+                    break;
+                }
+                else
+                {
+                    playerHit++;
+                    playerRecord[playerRecordIndex] = PlayerHitLocation;
+                    playerRecordIndex++;
+                    Console.WriteLine("Your lost " + playerHit + " hits");
                 }
 
-                Console.WriteLine(result);
- }
+                //Check whether computer hit player's ship
+                if (player.isHited(computerHitLocation, computerRecord) == 0)
+                {
+                    computerHit++;
+                    Console.WriteLine("Computer lost " + computerHit + " hits");
+                }
+                else if (player.isHited(computerHitLocation, computerRecord) == 1)
+                {
+                    result = "You lost!";
+                    break;
+                }
+                else
+                {
+                    computerHit++;
+                    computerRecord[computerRecordIndex] = computerHitLocation;
+                    computerRecordIndex++;
+                    Console.WriteLine("Computer lost " + computerHit + " hits");
+                }
+            }
 
-            catch (OutOfBoardException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            catch (BattleShipException)
-            {
-                Console.WriteLine("Unhandled BattleShipException");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Unhandled Exception: " + ex);
-            }
-
+            Console.WriteLine(result);
 
         }
     }

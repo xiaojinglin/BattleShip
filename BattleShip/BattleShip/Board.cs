@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace BattleShip
 {
@@ -15,10 +11,11 @@ namespace BattleShip
             Size = size;
         }
 
-        public bool OnBoard(int x, int y)
+        //Check whether the point is out of board
+        public bool OnBoard(Point point)
         {
-            return x >= 0 && x < Size &&
-                   y >= 0 && y < Size;
+            return point.X >= 0 && point.X < Size &&
+                   point.Y >= 0 && point.Y < Size;
         }
     }
 }
