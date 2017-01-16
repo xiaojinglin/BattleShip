@@ -33,10 +33,10 @@ namespace BattleShip
 
             string result = "";
 
-            //
+            //Start guessing locations
             while (true)
             {
-                //Set computer's hit
+                //Set computer's hit location
                 Point computerHitLocation = new Point(random.Next(size), random.Next(size));
 
                 //Player set the hit location
