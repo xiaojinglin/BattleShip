@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BattleShip
 {
@@ -17,19 +18,17 @@ namespace BattleShip
             computerShip.ShipLocation = new Point(random.Next(size), random.Next(size));
             computer.setShip = computerShip;
             int computerHit = 0;
-            Point[] computerRecord = new Point[size * size];
-            int computerRecordIndex = 0;
+            List<Point> computerRecord = new List<Point>(size * size);
 
             //Player's initalization
             Player player = new Player();
-            Location location = new Location();
-            int playerHit = 0;           
-            Point[] playerRecord = new Point[size * size];
-            int playerRecordIndex = 0;
-            Console.WriteLine("Please set your ship location:");
             Ship playerShip = new Ship();
+            Location location = new Location();
+            Console.WriteLine("Please set your ship location:");
             playerShip.ShipLocation = location.GetLocation(board);
             player.setShip = playerShip;
+            int playerHit = 0;
+            List<Point> playerRecord = new List<Point>(size * size);
 
             string result = "";
 
@@ -56,8 +55,7 @@ namespace BattleShip
                         break;
                     case 2:
                         playerHit++;
-                        playerRecord[playerRecordIndex] = playerHitLocation;
-                        playerRecordIndex++;
+                        playerRecord.Add( playerHitLocation);
                         Console.WriteLine("Your lost " + playerHit + " hits");
                         break;
                 }
@@ -74,8 +72,7 @@ namespace BattleShip
                         break;
                     case 2:
                         computerHit++;
-                        computerRecord[computerRecordIndex] = computerHitLocation;
-                        computerRecordIndex++;
+                        computerRecord.Add(computerHitLocation);
                         Console.WriteLine("Computer lost " + computerHit + " hits");
                         break;
                 }

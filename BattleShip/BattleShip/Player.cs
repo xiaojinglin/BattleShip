@@ -1,4 +1,4 @@
-﻿
+﻿using System.Collections.Generic;
 
 namespace BattleShip
 {
@@ -7,21 +7,16 @@ namespace BattleShip
         public Ship setShip { get; set; }
 
         //Check whether the player's ship is hited
-        public int isHited (Point point, Point[] points)
+        public int isHited (Point point, List<Point> points)
         {
             //Check that players don’t accidentally guess locations that they’ve already guessed
-            foreach (Point p in points)
-            {
-                if(p!=null)
+            Point duplicatePoint = points.Find(
+                delegate(Point p)
                 {
-                    if (point.X == p.X && point.Y == p.Y)
-                    {
-                        return 0;
-                    }                   
-                }
-                
-            }
-            return this.setShip.isHited(point);
+                    return p.X == point.X && p.Y == point.Y;
+                });
+
+            return duplicatePoint == null ? this.setShip.isHited(point) : 0;
         }
     }
 }
